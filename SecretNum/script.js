@@ -1,98 +1,84 @@
-// -----------------------------------------------------
-// 1. Imprime del 1 al 10
-// -----------------------------------------------------
-function ejercicio1() {
-  let salida = "---- FOR ----\n";
+// ------------ VALIDACIONES ------------------
 
-  // FOR
-  for (let i = 1; i <= 10; i++) {
-    salida += i + "\n";
-  }
+function esEnteroPositivo(num) {
+    return Number.isInteger(num) && num >= 0;
+}
 
-  // WHILE
-  salida += "\n---- WHILE ----\n";
-  let i = 1;
-  while (i <= 10) {
-    salida += i + "\n";
-    i++;
-  }
+// ----------- NÚMEROS PRIMOS -----------------
 
-  // DO WHILE
-  salida += "\n---- DO WHILE ----\n";
-  let x = 1;
-  do {
-    salida += x + "\n";
-    x++;
-  } while (x <= 10);
+function esPrimo(num) {
+    if (num < 2 || !Number.isInteger(num)) return false;
 
-  // Mostrar en el recuadro
-  document.getElementById("out1").textContent = salida;
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) return false;
+    }
+    return true;
+}
+
+function mostrarPrimos() {
+    const inicio = Number(document.getElementById("inicio").value);
+    const fin = Number(document.getElementById("fin").value);
+
+    if (
+        isNaN(inicio) || isNaN(fin) ||
+        !Number.isInteger(inicio) || !Number.isInteger(fin) ||
+        inicio < 0 || fin < 0
+    ) {
+        document.getElementById("resultadoPrimos").innerText =
+            "❌ Error: introduce solo números enteros positivos.";
+        return;
+    }
+
+    if (inicio > fin) {
+        document.getElementById("resultadoPrimos").innerText =
+            "❌ El número de inicio no puede ser mayor que el fin.";
+        return;
+    }
+
+    let primos = [];
+    for (let i = inicio; i <= fin; i++) {
+        if (esPrimo(i)) primos.push(i);
+    }
+
+    document.getElementById("resultadoPrimos").innerText =
+        primos.length > 0
+            ? "Números primos: " + primos.join(", ")
+            : "No hay números primos en ese rango.";
 }
 
 
+// ----------- JUEGO DEL NÚMERO SECRETO (SIN ALERTAS) -----------------
+let secreto = Math.floor(Math.random() * 100) + 1;
+let intentos = 0;
 
-// -----------------------------------------------------
-// 2. Suma del 1 al N
-// -----------------------------------------------------
-function ejercicio2() {
-  let n = parseInt(prompt("Introduce un número N:"));
-  let suma = 0;
+function comprobarNumero() {
+    const entrada = document.getElementById("numeroUsuario").value;
+    const numero = Number(entrada);
 
-  for (let i = 1; i <= n; i++) {
-    suma += i;
-  }
+    // Validaciones
+    if (
+        isNaN(numero) ||
+        !Number.isInteger(numero) ||
+        numero < 1 || numero > 100
+    ) {
+        document.getElementById("pista").innerText =
+            "❌ Introduce un número entero entre 1 y 100.";
+        return;
+    }
 
-  document.getElementById("out2").textContent =
-    `La suma de 1 al ${n} es: ${suma}`;
-}
+    intentos++;
 
+    if (numero > secreto) {
+        document.getElementById("pista").innerText = "📉 El número secreto es menor.";
+    } else if (numero < secreto) {
+        document.getElementById("pista").innerText = "📈 El número secreto es mayor.";
+    } else {
+        document.getElementById("pista").innerText = "🎉 ¡Correcto!";
+        document.getElementById("resultadoSecreto").innerText =
+            `Has acertado en ${intentos} intentos.`;
 
-// -----------------------------------------------------
-// 3. Números pares dentro de un rango
-// -----------------------------------------------------
-function ejercicio3() {
-  let inicio = parseInt(prompt("Número inicial:"));
-  let fin = parseInt(prompt("Número final:"));
-
-  let salida = "";
-
-  for (let i = inicio; i <= fin; i++) {
-    if (i % 2 === 0) salida += i + " ";
-  }
-
-  document.getElementById("out3").textContent = salida;
-}
-
-
-// -----------------------------------------------------
-// 4. Triángulo
-// -----------------------------------------------------
-function ejercicio4() {
-  let lineas = parseInt(prompt("Número de líneas del triángulo:"));
-  let salida = "";
-
-  for (let i = 1; i <= lineas; i++) {
-    salida += "*".repeat(i) + "\n";
-  }
-
-  document.getElementById("out4").textContent = salida;
-}
-
-
-// -----------------------------------------------------
-// 5. Árbol de Navidad
-// -----------------------------------------------------
-function ejercicio5() {
-  let altura = parseInt(prompt("Altura del árbol:"));
-  let salida = "";
-
-  // copa
-  for (let i = 1; i <= altura; i++) {
-    salida += " ".repeat(altura - i) + "*".repeat(i * 2 - 1) + "\n";
-  }
-
-  // tronco
-  salida += " ".repeat(altura - 1) + "||";
-
-  document.getElementById("out5").textContent = salida;
+        // Generamos un nuevo número secreto automáticamente
+        secreto = Math.floor(Math.random() * 100) + 1;
+        intentos = 0;
+    }
 }
