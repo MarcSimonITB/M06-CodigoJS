@@ -1,10 +1,7 @@
-// ------------ VALIDACIONES ------------------
 
 function esEnteroPositivo(num) {
     return Number.isInteger(num) && num >= 0;
 }
-
-// ----------- NÚMEROS PRIMOS -----------------
 
 function esPrimo(num) {
     if (num < 2 || !Number.isInteger(num)) return false;
@@ -25,13 +22,13 @@ function mostrarPrimos() {
         inicio < 0 || fin < 0
     ) {
         document.getElementById("resultadoPrimos").innerText =
-            "❌ Error: introduce solo números enteros positivos.";
+            "Error: introduce solo números enteros positivos.";
         return;
     }
 
     if (inicio > fin) {
         document.getElementById("resultadoPrimos").innerText =
-            "❌ El número de inicio no puede ser mayor que el fin.";
+            "El número de inicio no puede ser mayor que el fin.";
         return;
     }
 
@@ -46,8 +43,6 @@ function mostrarPrimos() {
             : "No hay números primos en ese rango.";
 }
 
-
-// ----------- JUEGO DEL NÚMERO SECRETO (SIN ALERTAS) -----------------
 let secreto = Math.floor(Math.random() * 100) + 1;
 let intentos = 0;
 
@@ -55,14 +50,13 @@ function comprobarNumero() {
     const entrada = document.getElementById("numeroUsuario").value;
     const numero = Number(entrada);
 
-    // Validaciones
     if (
         isNaN(numero) ||
         !Number.isInteger(numero) ||
         numero < 1 || numero > 100
     ) {
         document.getElementById("pista").innerText =
-            "❌ Introduce un número entero entre 1 y 100.";
+            "Introduce un número entero entre 1 y 100.";
         return;
     }
 
@@ -77,7 +71,6 @@ function comprobarNumero() {
         document.getElementById("resultadoSecreto").innerText =
             `Has acertado en ${intentos} intentos.`;
 
-        // Generamos un nuevo número secreto automáticamente
         secreto = Math.floor(Math.random() * 100) + 1;
         intentos = 0;
     }
