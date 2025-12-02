@@ -63,11 +63,11 @@ function comprobarNumero() {
     intentos++;
 
     if (numero > secreto) {
-        document.getElementById("pista").innerText = "📉 El número secreto es menor.";
+        document.getElementById("pista").innerText = "El número secreto es menor.";
     } else if (numero < secreto) {
-        document.getElementById("pista").innerText = "📈 El número secreto es mayor.";
+        document.getElementById("pista").innerText = "El número secreto es mayor.";
     } else {
-        document.getElementById("pista").innerText = "🎉 ¡Correcto!";
+        document.getElementById("pista").innerText = " ¡Correcto!";
         document.getElementById("resultadoSecreto").innerText =
             `Has acertado en ${intentos} intentos.`;
 
