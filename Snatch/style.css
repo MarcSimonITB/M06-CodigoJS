@@ -1,0 +1,42 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+h1{
+    color: red;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+p{
+    font-style: italic;
+}
+h2{
+    color: grey;
+    text-decoration: underline;
+}
+
+ol{
+    list-style: upper-roman;
+}
+ul{
+    list-style: square;
+}
+.blue{
+background-color: cyan;
+color: blue;
+}
+.green{
+background-color: green;
+color: lightgreen;
+}
+.lime{
+background-color: lime;
+color: red;
+}
+.red{
+background-color: red;
+color: lime;
+}
+.urls, a{
+    color: green;
+    text-decoration: none;
+}

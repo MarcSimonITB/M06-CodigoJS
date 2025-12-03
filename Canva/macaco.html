@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Invaders - Código Claro</title>
+  <style>
+    html, body {
+      height: 100%; margin: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #000;
+    }
+    canvas {
+      border: 2px solid #0f0;
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="400" height="400"></canvas>
+
+  <script>
+    // =========================================================
+    // CANVAS
+    // =========================================================
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+
+
+    // =========================================================
+    // MATRICES DE SPRITES (IDLE A / IDLE B)
+    // =========================================================
+    const ENEMY_FRAMES_A = [
+      // 🔴 MACACO 1
+      [
+        [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
+        [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
+        [0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0],
+        [0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0]
+      ],
+
+      // 🟢 MACACO 2
+      [
+        [0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,0,0,0,0,0],
+        [0,0,0,0,1,1,1,1,1,1,0,1,1,0,1,1,1,0,0,0],
+        [0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0],
+        [0,0,0,0,1,0,1,0,0,1,0,0,1,0,0,0,1,0,0,0]
+      ],
+
+      // 🟣 MACACO 3
+      [
+        [0,0,0,0,1,1,0,1,1,1,1,1,0,1,1,0,0,0,0,0],
+        [0,0,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,0,0,0],
+        [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]
+      ]
+    ];
+
+    // Frame B = misma matriz pero movida (parpadeo)
+    const ENEMY_FRAMES_B = ENEMY_FRAMES_A.map(matrix => {
+      const copy = matrix.map(row => [...row]);
+      const last = copy.pop();
+      copy.unshift(last);
+      return copy;
+    });
+
+    const COLOR_ENEMIGO = ['#ff2222', '#22ff22', '#cc66ff'];
+
+
+    // =========================================================
+    // CLASE: Bala
+    // =========================================================
+    class Bala {
+      constructor(x, y, color = '#ff0') {
+        this.x = x;
+        this.y = y;
+        this.w = 4;
+        this.h = 10;
+        this.color = color;
+      }
+
+      mover() {
+        this.y -= 6;
+      }
+
+      fuera() {
+        return this.y < -10;
+      }
+    }
+
+
+    // =========================================================
+    // CLASE: Nave del Jugador
+    // =========================================================
+    class Nave {
+      constructor() {
+        this.x = 180;
+        this.y = 370;
+        this.w = 40;
+        this.h = 10;
+        this.color = '#0f0';
+        this.ultimoDisparo = 0;
+      }
+
+      mover(izq, der) {
+        if (izq) this.x -= 4;
+        if (der) this.x += 4;
+        this.x = Math.max(0, Math.min(canvas.width - this.w, this.x));
+      }
+
+      puedeDisparar() {
+        return Date.now() - this.ultimoDisparo > 400;
+      }
+
+      disparar() {
+        this.ultimoDisparo = Date.now();
+        return new Bala(this.x + this.w / 2 - 2, this.y - 10);
+      }
+
+      dibujar() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+      }
+    }
+
+
+    // =========================================================
+    // CLASE: Macaco (enemigo)
+    // =========================================================
+    class Macaco {
+      constructor(x, y, tipo) {
+        this.x = x;
+        this.y = y;
+        this.tipo = tipo;
+        this.color = COLOR_ENEMIGO[tipo];
+        this.dir = 1; // derecha o izquierda
+        this.visible = true;
+      }
+
+      moverHorizontal() {
+        this.x += this.dir * 1;
+      }
+
+      bajar() {
+        this.dir *= -1;
+        this.y += 10;
+      }
+
+      recibirDisparo() {
+        this.visible = false;
+      }
+
+      dibujar(frameIDLE) {
+        if (!this.visible) return;
+        const sprite = frameIDLE === 0 ? ENEMY_FRAMES_A[this.tipo] : ENEMY_FRAMES_B[this.tipo];
+        ctx.fillStyle = this.color;
+        for (let r = 0; r < sprite.length; r++) {
+          for (let c = 0; c < sprite[r].length; c++) {
+            if (sprite[r][c]) ctx.fillRect(this.x + c * 3, this.y + r * 3, 3, 3);
+          }
+        }
+      }
+    }
+
+
+    // =========================================================
+    // INSTANCIAS PRINCIPALES
+    // =========================================================
+    const jugador = new Nave();
+    const balas = [];
+    const macacos = [];
+
+    // crear 3 filas * 5 columnas
+    for (let fila = 0; fila < 3; fila++) {
+      for (let col = 0; col < 5; col++) {
+        macacos.push(new Macaco(40 + col * 60, 30 + fila * 50, fila));
+      }
+    }
+
+
+    // =========================================================
+    // INPUT
+    // =========================================================
+    const teclas = {};
+    document.addEventListener('keydown', e => teclas[e.code] = true);
+    document.addEventListener('keyup', e => teclas[e.code] = false);
+
+
+    // =========================================================
+    // LOOP PRINCIPAL
+    // =========================================================
+    let idleFrame = 0;
+    setInterval(() => idleFrame = (idleFrame + 1) % 2, 500);
+
+    function actualizar() {
+      // ----- Jugador -----
+      jugador.mover(teclas['ArrowLeft'], teclas['ArrowRight']);
+
+      if (teclas['Space'] && jugador.puedeDisparar()) {
+        balas.push(jugador.disparar());
+      }
+
+      // ----- Balas -----
+      for (let i = balas.length - 1; i >= 0; i--) {
+        const b = balas[i];
+        b.mover();
+        if (b.fuera()) balas.splice(i, 1);
+      }
+
+      // ----- Macacos -----
+      let bajar = false;
+      for (const m of macacos) {
+        if (!m.visible) continue;
+        m.moverHorizontal();
+        if (m.x < 10 || m.x > canvas.width - 80) bajar = true;
+      }
+
+      if (bajar) macacos.forEach(m => m.bajar());
+
+      // ----- Colisiones bala/macaco -----
+      for (let i = balas.length - 1; i >= 0; i--) {
+        const b = balas[i];
+        for (let j = macacos.length - 1; j >= 0; j--) {
+          const m = macacos[j];
+          if (!m.visible) continue;
+
+          const w = 20 * 3;
+          const h = 10 * 3;
+
+          if (b.x < m.x + w && b.x + b.w > m.x && b.y < m.y + h && b.y + b.h > m.y) {
+            m.recibirDisparo();
+            balas.splice(i, 1);
+            break;
+          }
+        }
+      }
+
+      // ----- Dibujar -----
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      jugador.dibujar();
+
+      balas.forEach(b => {
+        ctx.fillStyle = b.color;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+      });
+
+      macacos.forEach(m => m.dibujar(idleFrame));
+    }
+
+
+    function loop() {
+      actualizar();
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+
+  </script>
+</body>
+</html>
