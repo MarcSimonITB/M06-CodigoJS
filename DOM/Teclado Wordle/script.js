@@ -1,21 +1,21 @@
 const grid = document.getElementById("grid");
 const tecladoLetras = document.getElementById("tecladoLetras");
 
-// Palabras permitidas
-const palabras = ["CASAS", "PERRO", "GATOS", "LAPIZ", "RATON"];
+
+const palabras = ["LOCAS", "CAZAS", "PATOS", "LAMER", "JAMON"];
 const palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)];
 
 let intento = "";
 let filaActual = 0;
 
-// Crear la grid 6x5
+
 for (let i = 0; i < 6*5; i++) {
     const celda = document.createElement("div");
     celda.classList.add("celda");
     grid.appendChild(celda);
 }
 
-// Crear teclado A-Z
+
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letra => {
     let tecla = document.createElement("div");
     tecla.classList.add("tecla");
