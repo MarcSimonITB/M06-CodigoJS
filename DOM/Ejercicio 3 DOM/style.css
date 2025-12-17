@@ -1,0 +1,19 @@
+.Tecla {
+    width: 50px;
+    height: 50px;
+    background-color: lightgray;
+    border: 1px solid black;
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+#teclado {
+    display: flex;
+    flex-wrap: wrap;
+    width: 350px;
+    margin: 0 auto;
+    gap: 5px;
+}

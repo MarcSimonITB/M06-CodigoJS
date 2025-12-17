@@ -1,0 +1,90 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+}
+
+#campoTexto {
+    width: 600px;
+    height: 40px;
+    border: 2px solid #999;
+    margin: 20px auto;
+    font-size: 24px;
+    padding: 5px;
+    text-align: left;
+}
+
+#contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+#tecladoLetras {
+    display: flex;
+    flex-wrap: wrap;
+    width: 550px;
+    gap: 10px;
+}
+
+#tecladoNumeros {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    gap: 10px;
+}
+
+.tecla {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    font-size: 32px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.letra {
+    background: orange;
+}
+
+.letra-verde {
+    background: green;
+}
+
+.num-azul {
+    background: blue;
+}
+
+.num-verde {
+    background: teal;
+}
+
+.num-amarillo {
+    background: yellow;
+    color: black;
+}
+
+#enviar, #borrar, #espacio {
+    height: 50px;
+    padding: 0 20px;
+    font-size: 20px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#enviar {
+    background: green;
+}
+
+#borrar {
+    background: red;
+}
+
+#espacio {
+    background: gray;
+}

@@ -1,0 +1,17 @@
+.tecla {
+    width: 100px;
+    height: 100px;
+    border: 5px grey solid;
+    border-radius: 3px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 40px;
+    color: grey;
+    text-align: center;
+    margin: 5px;
+}
+
+#teclado {
+    display: flex;
+    flex-wrap: wrap;
+    width: 400px;
+}
