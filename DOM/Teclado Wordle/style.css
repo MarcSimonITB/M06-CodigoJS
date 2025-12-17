@@ -1,90 +1,67 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
+    background: #f0f0f0;
 }
 
-#campoTexto {
-    width: 600px;
-    height: 40px;
-    border: 2px solid #999;
+h1 {
+    margin-top: 20px;
+}
+
+#grid {
+    display: grid;
+    grid-template-rows: repeat(6, 60px);
+    grid-template-columns: repeat(5, 60px);
+    gap: 5px;
+    justify-content: center;
     margin: 20px auto;
-    font-size: 24px;
-    padding: 5px;
-    text-align: left;
 }
 
-#contenedor {
+.celda {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #999;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    gap: 30px;
+    align-items: center;
+    font-size: 32px;
+    text-transform: uppercase;
+    background: white;
 }
 
 #tecladoLetras {
     display: flex;
     flex-wrap: wrap;
-    width: 550px;
+    width: 420px;
+    margin: auto;
     gap: 10px;
-}
-
-#tecladoNumeros {
-    display: grid;
-    grid-template-columns: repeat(3, 60px);
-    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .tecla {
     width: 60px;
     height: 60px;
     border-radius: 6px;
-    font-size: 32px;
+    font-size: 28px;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     user-select: none;
-}
-
-.letra {
     background: orange;
 }
 
-.letra-verde {
-    background: green;
-}
-
-.num-azul {
-    background: blue;
-}
-
-.num-verde {
-    background: teal;
-}
-
-.num-amarillo {
-    background: yellow;
-    color: black;
-}
-
-#enviar, #borrar, #espacio {
-    height: 50px;
-    padding: 0 20px;
-    font-size: 20px;
-    color: white;
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
+    color: white;
 }
 
-#enviar {
-    background: green;
-}
-
-#borrar {
-    background: red;
-}
-
-#espacio {
-    background: gray;
-}
+#comprobar { background: green; }
+#borrar { background: red; }

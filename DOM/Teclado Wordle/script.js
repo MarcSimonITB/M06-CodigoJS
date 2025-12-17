@@ -1,59 +1,75 @@
-let campoTexto = document.getElementById("campoTexto");
-let tecladoLetras = document.getElementById("tecladoLetras");
-let tecladoNumeros = document.getElementById("tecladoNumeros");
+const grid = document.getElementById("grid");
+const tecladoLetras = document.getElementById("tecladoLetras");
 
+// Palabras permitidas
+const palabras = ["CASAS", "PERRO", "GATOS", "LAPIZ", "RATON"];
+const palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)];
 
-const letrasVerdes = ["A", "E", "I", "O", "U"];
-const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+let intento = "";
+let filaActual = 0;
 
-letras.forEach(letra => {
+// Crear la grid 6x5
+for (let i = 0; i < 6*5; i++) {
+    const celda = document.createElement("div");
+    celda.classList.add("celda");
+    grid.appendChild(celda);
+}
+
+// Crear teclado A-Z
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letra => {
     let tecla = document.createElement("div");
     tecla.classList.add("tecla");
-
-    if (letrasVerdes.includes(letra)) {
-        tecla.classList.add("letra-verde");
-    } else {
-        tecla.classList.add("letra");
-    }
-
     tecla.textContent = letra;
-    tecla.onclick = () => campoTexto.textContent += letra;
+
+    tecla.onclick = () => {
+        if (intento.length < 5) {
+            intento += letra;
+            actualizarGrid();
+        }
+    };
 
     tecladoLetras.appendChild(tecla);
 });
 
-const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-numeros.forEach(num => {
-    let tecla = document.createElement("div");
-    tecla.classList.add("tecla");
-
-    if (num % 2 === 0) {
-        tecla.classList.add("num-azul");
-    } else if (num % 3 === 0) {
-        tecla.classList.add("num-amarillo");
-    } else {
-        tecla.classList.add("num-verde");
+function actualizarGrid() {
+    for (let i = 0; i < 5; i++) {
+        const celda = grid.children[filaActual*5 + i];
+        celda.textContent = intento[i] || "";
+        celda.style.backgroundColor = "white";
     }
-
-    tecla.textContent = num;
-    tecla.onclick = () => campoTexto.textContent += num;
-
-    tecladoNumeros.appendChild(tecla);
-});
-
-
-document.getElementById("enviar").onclick = () => {
-    alert("Texto enviado: " + campoTexto.textContent);
-    campoTexto.textContent = "";
-};
+}
 
 
 document.getElementById("borrar").onclick = () => {
-    campoTexto.textContent = campoTexto.textContent.slice(0, -1);
+    intento = intento.slice(0, -1);
+    actualizarGrid();
 };
 
+document.getElementById("comprobar").onclick = () => {
+    if (intento.length !== 5) {
+        alert("La palabra debe tener 5 letras");
+        return;
+    }
 
-document.getElementById("espacio").onclick = () => {
-    campoTexto.textContent += " ";
+    for (let i = 0; i < 5; i++) {
+        const celda = grid.children[filaActual*5 + i];
+
+        if (intento[i] === palabraSecreta[i]) {
+            celda.style.backgroundColor = "green";
+        } else if (palabraSecreta.includes(intento[i])) {
+            celda.style.backgroundColor = "goldenrod";
+        } else {
+            celda.style.backgroundColor = "gray";
+        }
+    }
+
+    if (intento === palabraSecreta) {
+        alert("¡Has ganado!");
+    }
+
+    intento = "";
+    filaActual++;
+    if (filaActual >= 6 && intento !== palabraSecreta) {
+        alert("¡Juego terminado! La palabra era: " + palabraSecreta);
+    }
 };

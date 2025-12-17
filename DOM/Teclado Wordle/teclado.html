@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 2 - Teclado alfanumérico</title>
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Wordle simple</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>Ejercicio 2 - Teclado alfanumérico</h1>
+<h1>Wordle</h1>
 
-    <div id="campoTexto"></div>
+<div id="grid"></div>
 
-    <div id="contenedor">
-        <div id="tecladoLetras"></div>
-        <div id="tecladoNumeros"></div>
+<div id="tecladoLetras"></div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button id="enviar">Enviar</button>
-            <button id="borrar">Borrar</button>
-            <button id="espacio">Espacio</button>
-        </div>
-    </div>
+<div>
+    <button id="comprobar">Comprobar</button>
+    <button id="borrar">Borrar</button>
+</div>
 
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
