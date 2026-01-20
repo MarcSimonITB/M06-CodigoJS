@@ -131,7 +131,54 @@ window.addEventListener('click', (event) => {
         }, 6000);
     }
 });
+// =======================
+// ARRAY DE OBJETOS INTERACTIVOS
+// =======================
+const interactivos = [];
+const palmera3 = scene.getObjectByName('palmera_3');
+if (palmera3) {
+    interactivos.push(palmera3); // agregamos la palmera_3 a los interactivos
+}
 
+let bordeSeleccion = null; // guardamos el borde actual
+
+window.addEventListener('click', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    // intersectar solo con los objetos interactivos
+    const intersects = raycaster.intersectObjects(interactivos, true);
+
+    if (intersects.length > 0) {
+        const objeto = intersects[0].object;
+
+        // eliminar borde anterior si existe
+        if (bordeSeleccion) scene.remove(bordeSeleccion);
+
+        // crear borde solo sobre este objeto
+        const edges = new THREE.EdgesGeometry(objeto.geometry);
+        bordeSeleccion = new THREE.LineSegments(
+            edges,
+            new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 })
+        );
+
+        bordeSeleccion.position.copy(objeto.getWorldPosition(new THREE.Vector3()));
+        bordeSeleccion.rotation.copy(objeto.getWorldRotation(new THREE.Euler()));
+        bordeSeleccion.scale.copy(objeto.getWorldScale(new THREE.Vector3()));
+
+        scene.add(bordeSeleccion);
+
+        // mostrar el div de saludo
+        divHola.style.display = 'block';
+        divHola.innerHTML = `
+            <h1 style="margin:0;color:#333;">¡HOLA!</h1>
+            <p style="margin:5px 0 0 0;">Has hecho clic en ${objeto.name}</p>
+        `;
+        setTimeout(() => { divHola.style.display = 'none'; }, 6000);
+    }
+});
 animate();
 
 // =======================
