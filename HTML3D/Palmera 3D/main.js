@@ -1,57 +1,87 @@
-// Importar Three.js
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// Importar GLTFLoader
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
-
+// =======================
 // ESCENA
+// =======================
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdddddd);
 
+// =======================
 // CÁMARA
+// =======================
 const camera = new THREE.PerspectiveCamera(
-    75,
+    60,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
 );
-camera.position.set(0, 1, 3);
+camera.position.set(0, 2, 6);
+camera.lookAt(0, 1, 0);
 
-// RENDER
+// =======================
+// RENDERER
+// =======================
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-// LUZ
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 5, 5);
-scene.add(light);
+// =======================
+// CONTROLES
+// =======================
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
 
-// LUZ AMBIENTE
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+// =======================
+// LUCES
+// =======================
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
+const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+dirLight.position.set(5, 5, 5);
+scene.add(dirLight);
 
-// ==============================
-// LOADER (igual que en la diapositiva)
-// ==============================
+// =======================
+// LOADER GLB
+// =======================
 const loader = new GLTFLoader();
 
 loader.load(
-    'models/Box.glb', // ruta al modelo
-    function (gltf) {
-        scene.add(gltf.scene);
+    'models/modelo.glb', // 🔴 CAMBIA EL NOMBRE SI HACE FALTA
+    (gltf) => {
+        const model = gltf.scene;
+
+        // Ajustes IMPORTANTES
+        model.scale.set(1, 1, 1);     // prueba 0.1 o 0.01 si no se ve
+        model.position.set(0, 0, 0);
+
+        scene.add(model);
+        console.log('✅ Modelo GLB cargado');
     },
     undefined,
-    function (error) {
-        console.error('Error cargando GLB:', error);
+    (error) => {
+        console.error('❌ Error cargando GLB:', error);
     }
 );
 
-
+// =======================
 // ANIMACIÓN
+// =======================
 function animate() {
     requestAnimationFrame(animate);
+    controls.update();
     renderer.render(scene, camera);
 }
 
 animate();
+
+// =======================
+// RESIZE
+// =======================
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
