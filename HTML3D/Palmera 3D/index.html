@@ -1,39 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Modelo 3D GLB - Three.js</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Palmeras Día/Noche</title>
+<style>
+    body { margin:0; overflow:hidden; }
+    canvas { display:block; }
+    button { padding:10px 15px; font-size:16px; position:absolute; top:10px; left:10px; z-index:10;}
+</style>
 </head>
 <body>
 
-<div id="saludos" class="mensaje" style="display:none; position:absolute; top:20px; left:20px; background: rgba(255,255,255,0.9); padding:10px; border-radius:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
-    <h1 style="margin: 0; color: #333;">RAAAAAHR</h1>
+<div id="saludos" style="display:none; position:absolute; top:50px; left:20px; background: rgba(255,255,255,0.9); padding:10px; border-radius:5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+    <h1 style="margin:0;color:#333;">RAAAAAHR</h1>
+    <p style="margin:5px 0 0 0;"></p>
     <img src="skeleton-sword.gif" alt="locura">
     <audio id="audioClick" src="skeletonbanging.mp3"></audio>
 </div>
-    <!-- Import map -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
 
-    
+<button id="btnLuz">Luz Día</button>
 
-    <!-- Script principal -->
-    <script type="module" src="main.js"></script>
+<!-- Import map -->
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+
+<!-- Script principal -->
+<script type="module" src="main.js"></script>
 
 </body>
 </html>
